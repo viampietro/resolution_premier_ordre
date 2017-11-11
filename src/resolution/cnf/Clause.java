@@ -158,28 +158,36 @@ public class Clause {
 
 	/**
 	 * 
-	 * @post la clause courante et la clause candidate n'ont pas été modifiées
-	 * 		 durant l'opération.
-	 * @param clauseCandidate,
+	 * @post la clause courante et la clause en paramètre n'ont pas été
+	 *       modifiées durant l'opération.
+	 * @param clauseCandid,
 	 *            la clause avec laquelle la clause courante va être résolue
 	 * @return La clause resolvante de la règle de résolution, si cette règle a
-	 *         pu s'appliquer entre la clauseCandidate et la clause courante.
-	 *         null, si la règle de résolution n'était pas applicable.
-	 *                  
+	 *         pu s'appliquer entre la clause en parametre et la clause
+	 *         courante. null, si la règle de résolution n'était pas applicable.
+	 * 
 	 */
-	public Clause resoudreAvec(Clause clauseCandidate) {
-		
-		ArrayList<AtomeSimple> paireAtomesContraires = selectionnerAtomesContraires(clauseCandidate);
+	public Clause resoudreAvec(Clause clause) {
+
+		/*
+		 * Construction de deux nouvelles clauses par recopie pour éviter la
+		 * modification de la clause courante et de la clause en paramètre
+		 */
+		Clause clauseCourante = new Clause(this);
+		Clause clauseCandidate = new Clause(clause);
+
+		ArrayList<AtomeSimple> paireAtomesContraires = clauseCourante.selectionnerAtomesContraires(clauseCandidate);
 		if (paireAtomesContraires != null && paireAtomesContraires.size() == 2) {
-			
+
 			AtomeSimple premierAtome = paireAtomesContraires.get(0);
 			AtomeSimple deuxiemeAtome = paireAtomesContraires.get(1);
 			premierAtome.renommerAtomes(deuxiemeAtome);
-			
+
 			StackTraceElement[] ste = Thread.currentThread().getStackTrace();
-			throw new RuntimeException("NYI " + getClass().getSimpleName() + "." + ste[ste.length - 2].getMethodName() + "()");
+			throw new RuntimeException(
+					"NYI " + getClass().getSimpleName() + "." + ste[ste.length - 2].getMethodName() + "()");
 		}
-		
+
 		/*
 		 * Si les deux clauses à résoudre ne possède pas d'atomes contraires,
 		 * pas la peine de chercher à unifier. La fonction retourne null.
@@ -219,6 +227,12 @@ public class Clause {
 						&& ((AtomeSimple) atomeCCourante).estLeContraireDe((AtomeSimple) atomeCArgument)) {
 
 					paireAtomesContraires = new ArrayList<>();
+
+					/*
+					 * Utilisation du constructeur par recopie pour déréférencer
+					 * atomeCCourante et atomeCArgument qui ne doivent pas être
+					 * modifiés
+					 */
 					paireAtomesContraires.add((AtomeSimple) atomeCCourante);
 					paireAtomesContraires.add((AtomeSimple) atomeCArgument);
 

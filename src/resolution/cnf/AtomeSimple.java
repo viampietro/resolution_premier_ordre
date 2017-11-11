@@ -8,7 +8,25 @@ import resolution.formule.Predicat;
 public class AtomeSimple extends Atome {
 
 	boolean negation;
+	Predicat predicat;
 
+	/*
+	 * CONSTRUCTORS
+	 */
+	public AtomeSimple(boolean negation, Predicat p) {
+		super();
+		this.negation = negation;
+		this.predicat = p;
+	}
+	
+	public AtomeSimple(AtomeSimple a) {
+		this.negation = a.negation;
+		this.predicat = new Predicat(a.getPredicat());
+	}
+	
+	/*
+	 * GETTERS AND SETTERS
+	 */
 	public boolean isNegation() {
 		return negation;
 	}
@@ -29,14 +47,10 @@ public class AtomeSimple extends Atome {
 		this.predicat = predicat;
 	}
 
-	Predicat predicat;
 
-	public AtomeSimple(boolean negation, Predicat p) {
-		super();
-		this.negation = negation;
-		this.predicat = p;
-	}
-
+	/*
+	 * METHODS
+	 */
 	public String toString() {
 		return (negation ? "!" : "") + predicat.toString();
 	}

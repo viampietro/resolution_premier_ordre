@@ -17,6 +17,24 @@ public class Predicat extends Formule {
 	ArrayList<Terme> args;
 	
 	/*
+	 * CONSTRUCTORS
+	 */
+	public Predicat(Predicat p) {
+		this.nom = p.nom;
+		this.args = new ArrayList<>(p.args);
+	}
+	
+	public Predicat(String nom, Terme... args) {
+		super();
+		this.nom = nom;
+
+		this.args = new ArrayList<>();
+		for (Terme t : args) {
+			this.args.add(t);
+		}
+	}
+	
+	/*
 	 * GETTERS AND SETTERS
 	 */
 	public String getNom() {
@@ -35,16 +53,9 @@ public class Predicat extends Formule {
 		this.args = args;
 	}
 
-	public Predicat(String nom, Terme... args) {
-		super();
-		this.nom = nom;
-
-		this.args = new ArrayList<>();
-		for (Terme t : args) {
-			this.args.add(t);
-		}
-	}
-
+	/*
+	 * METHODS
+	 */
 	@Override
 	public ArrayList<Clause> clausifier() {
 
