@@ -158,17 +158,28 @@ public class Clause {
 
 	/**
 	 * 
+	 * @post la clause courante et la clause candidate n'ont pas été modifiées
+	 * 		 durant l'opération.
 	 * @param clauseCandidate,
 	 *            la clause avec laquelle la clause courante va être résolue
 	 * @return La clause resolvante de la règle de résolution, si cette règle a
 	 *         pu s'appliquer entre la clauseCandidate et la clause courante.
 	 *         null, si la règle de résolution n'était pas applicable.
+	 *                  
 	 */
 	public Clause resoudreAvec(Clause clauseCandidate) {
-
-		if (selectionnerAtomesContraires(clauseCandidate) != null)
-			return null;
-
+		
+		ArrayList<AtomeSimple> paireAtomesContraires = selectionnerAtomesContraires(clauseCandidate);
+		if (paireAtomesContraires != null && paireAtomesContraires.size() == 2) {
+			
+			AtomeSimple premierAtome = paireAtomesContraires.get(0);
+			AtomeSimple deuxiemeAtome = paireAtomesContraires.get(1);
+			premierAtome.renommerAtomes(deuxiemeAtome);
+			
+			StackTraceElement[] ste = Thread.currentThread().getStackTrace();
+			throw new RuntimeException("NYI " + getClass().getSimpleName() + "." + ste[ste.length - 2].getMethodName() + "()");
+		}
+		
 		/*
 		 * Si les deux clauses à résoudre ne possède pas d'atomes contraires,
 		 * pas la peine de chercher à unifier. La fonction retourne null.
@@ -181,8 +192,15 @@ public class Clause {
 
 	/**
 	 * 
-	 * @param clause
-	 * @return
+	 * @param clause,
+	 *            la clause qui sera utilisée pour chercher un atome contraire à
+	 *            un des atomes de la clause courante.
+	 * 
+	 * @return Retourne la première paire d'atomes contraires trouvés tel que le
+	 *         premier atome de la paire appartient à la clause courante et le
+	 *         deuxième atome de la paire appartient à la clause en paramètre.
+	 *         Retourne null si aucune paire d'atomes contraires n'existe entre
+	 *         la clause courante et la clause en paramètre.
 	 */
 	public ArrayList<AtomeSimple> selectionnerAtomesContraires(Clause clause) {
 

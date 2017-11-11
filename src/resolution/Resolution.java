@@ -51,6 +51,7 @@ public class Resolution {
 
 				for (Clause c : unionSatClauseCourante) {
 					clauseResolvante = c.resoudreAvec(clauseCourante);
+					
 					if (clauseResolvante != null)
 						clauses.add(clauseResolvante);
 				}

@@ -47,12 +47,28 @@ public class AtomeSimple extends Atome {
 	 *            l'atome comparé avec l'atome courant
 	 * @return Vrai si les prédicats de l'atome courant et de l'atome en
 	 *         paramètre ont le même nom et sont de polarité contraire (l'un est
-	 *         négatif et l'autre positif, ou inversement).
-	 *         Faux sinon.
+	 *         négatif et l'autre positif, ou inversement). Faux sinon.
 	 */
 	public boolean estLeContraireDe(AtomeSimple atome) {
 
-		return getPredicat().getNom().equals(atome.getPredicat().getNom())
-				&& ((isNegation() && atome.isAffirmation()) || (isAffirmation() && atome.isNegation()));
+		if (atome != null && atome.getPredicat() != null)
+			return getPredicat().getNom().equals(atome.getPredicat().getNom())
+					&& ((isNegation() && atome.isAffirmation()) || (isAffirmation() && atome.isNegation()));
+		else return false;
+	}
+
+	/**
+	 * 
+	 * @param atome,
+	 *            l'atome qui sera comparer avec l'atome courant pour appliquer
+	 *            le renommage des termes.
+	 * 
+	 *            Modifie l'atome courant et l'atome en paramètre, tel qu'à la
+	 *            fin de l'opération le prédicat de l'atome courant et le
+	 *            prédicat de l'atome en paramètre ne possèdent plus aucun terme
+	 *            en commun.
+	 */
+	public void renommerAtomes(AtomeSimple atome) {
+
 	}
 }

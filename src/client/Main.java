@@ -46,16 +46,19 @@ public class Main {
 		c.getAtomes().put("!P(x)", new AtomeSimple(true, new Predicat("P", x)));
 		
 		Clause c1 = new Clause();
-		c1.getAtomes().put("!P(x)", new AtomeSimple(true, new Predicat("P", x)));
+		c1.getAtomes().put("!P(y)", new AtomeSimple(true, null));
 		c1.getAtomes().put("P(x)", new AtomeSimple(false, new Predicat("P", x)));
 		
-		System.out.println("C is a tautology : " + c.estUneTautologie());
+//		System.out.println("C is a tautology : " + c.estUneTautologie());
 		
 		ArrayList<Clause> clauses = new ArrayList<>();
 		clauses.add(c1);
 		
-		System.out.println("C is included in clauses : " + c.estIncluseDans(clauses));
-		System.out.println("Clause set is unsatifiable : " + Resolution.resoudre(clauses));
+//		System.out.println("C is included in clauses : " + c.estIncluseDans(clauses));
+//		System.out.println("Clause set is unsatisfiable : " + Resolution.resoudre(clauses));
+		
+		System.out.println("Selected atoms pair : " + c.selectionnerAtomesContraires(c1));
+		System.out.println("Resolution result : " + c.resoudreAvec(c1));
 		
 	}
 
