@@ -18,12 +18,12 @@ public class AtomeSimple extends Atome {
 		this.negation = negation;
 		this.predicat = p;
 	}
-	
+
 	public AtomeSimple(AtomeSimple a) {
 		this.negation = a.negation;
 		this.predicat = new Predicat(a.getPredicat());
 	}
-	
+
 	/*
 	 * GETTERS AND SETTERS
 	 */
@@ -47,28 +47,31 @@ public class AtomeSimple extends Atome {
 		this.predicat = predicat;
 	}
 
-
 	/*
 	 * METHODS
 	 */
 	public String toString() {
-		return (negation ? "!" : "") + predicat.toString();
+		if (predicat != null)
+			return (negation ? "!" : "") + predicat.toString();
+		else
+			return "null";
 	}
 
 	/**
 	 * 
 	 * @param atome,
-	 *            l'atome comparé avec l'atome courant
-	 * @return Vrai si les prédicats de l'atome courant et de l'atome en
-	 *         paramètre ont le même nom et sont de polarité contraire (l'un est
-	 *         négatif et l'autre positif, ou inversement). Faux sinon.
+	 *            l'atome comparï¿½ avec l'atome courant
+	 * @return Vrai si les prï¿½dicats de l'atome courant et de l'atome en
+	 *         paramï¿½tre ont le mï¿½me nom et sont de polaritï¿½ contraire (l'un est
+	 *         nï¿½gatif et l'autre positif, ou inversement). Faux sinon.
 	 */
 	public boolean estLeContraireDe(AtomeSimple atome) {
 
 		if (atome != null && atome.getPredicat() != null)
 			return getPredicat().getNom().equals(atome.getPredicat().getNom())
 					&& ((isNegation() && atome.isAffirmation()) || (isAffirmation() && atome.isNegation()));
-		else return false;
+		else
+			return false;
 	}
 
 	/**
@@ -77,12 +80,13 @@ public class AtomeSimple extends Atome {
 	 *            l'atome qui sera comparer avec l'atome courant pour appliquer
 	 *            le renommage des termes.
 	 * 
-	 *            Modifie l'atome courant et l'atome en paramètre, tel qu'à la
-	 *            fin de l'opération le prédicat de l'atome courant et le
-	 *            prédicat de l'atome en paramètre ne possèdent plus aucun terme
+	 *            Modifie l'atome courant et l'atome en paramï¿½tre, tel qu'ï¿½ la
+	 *            fin de l'opï¿½ration le prï¿½dicat de l'atome courant et le
+	 *            prï¿½dicat de l'atome en paramï¿½tre ne possï¿½dent plus aucun terme
 	 *            en commun.
 	 */
 	public void renommerAtomes(AtomeSimple atome) {
-
+		throw new RuntimeException("NYI method AtomeSimple.renommerAtomes(AtomeSimple)");
 	}
+
 }

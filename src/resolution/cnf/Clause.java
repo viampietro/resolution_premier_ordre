@@ -4,6 +4,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import resolution.CheckRuleException;
+import resolution.ConflictRuleException;
+import resolution.Equation;
+import resolution.Resolution;
+import resolution.formule.Variable;
+
 public class Clause {
 
 	/**
@@ -136,8 +142,8 @@ public class Clause {
 	 * @param clauses,
 	 *            l'ensemble de Clause dans lequel la clause courante va etre
 	 *            recherchee.
-	 * @return Retourne vrai si il existe une clause c1 appartenant ‡ clauses
-	 *         qui est Ègale ‡ la clause courante. Retourne faux, si une telle
+	 * @return Retourne vrai si il existe une clause c1 appartenant ÔøΩ clauses
+	 *         qui est ÔøΩgale ÔøΩ la clause courante. Retourne faux, si une telle
 	 *         clause c1 n'existe pas.
 	 */
 	public boolean estIncluseDans(ArrayList<Clause> clauses) {
@@ -158,39 +164,72 @@ public class Clause {
 
 	/**
 	 * 
-	 * @post la clause courante et la clause en paramËtre n'ont pas ÈtÈ
-	 *       modifiÈes durant l'opÈration.
-	 * @param clauseCandid,
-	 *            la clause avec laquelle la clause courante va Ítre rÈsolue
-	 * @return La clause resolvante de la rËgle de rÈsolution, si cette rËgle a
+	 * @post la clause courante et la clause en param√®tre n'ont pas √©t√©
+	 *       modifi√©es durant l'op√©ration.
+	 * @param clause,
+	 *            la clause avec laquelle la clause courante va √™tre r√©solue
+	 * @return La clause resolvante de la r√®gle de r√©solution, si cette r√®gle a
 	 *         pu s'appliquer entre la clause en parametre et la clause
-	 *         courante. null, si la rËgle de rÈsolution n'Ètait pas applicable.
+	 *         courante. null, si la r√®gle de r√©solution n'√©tait pas applicable.
 	 * 
 	 */
 	public Clause resoudreAvec(Clause clause) {
 
 		/*
-		 * Construction de deux nouvelles clauses par recopie pour Èviter la
-		 * modification de la clause courante et de la clause en paramËtre
+		 * Construction de deux nouvelles clauses par recopie pour √©viter la
+		 * modification de la clause courante et de la clause en param√®tre
 		 */
 		Clause clauseCourante = new Clause(this);
 		Clause clauseCandidate = new Clause(clause);
+		Clause clauseFinale = null;
 
 		ArrayList<AtomeSimple> paireAtomesContraires = clauseCourante.selectionnerAtomesContraires(clauseCandidate);
 		if (paireAtomesContraires != null && paireAtomesContraires.size() == 2) {
 
 			AtomeSimple premierAtome = paireAtomesContraires.get(0);
 			AtomeSimple deuxiemeAtome = paireAtomesContraires.get(1);
-			premierAtome.renommerAtomes(deuxiemeAtome);
 
-			StackTraceElement[] ste = Thread.currentThread().getStackTrace();
-			throw new RuntimeException(
-					"NYI " + getClass().getSimpleName() + "." + ste[ste.length - 2].getMethodName() + "()");
+			/*
+			 * La liste des √©quations, correspondant aux couplage des arguments
+			 * du pr√©dicat du premier atome avec les arguments du pr√©dicat du
+			 * deuxi√®me atome, est calcul√©e.
+			 */
+			ArrayList<Equation> equations = premierAtome.getPredicat().genererEquations(deuxiemeAtome.getPredicat());
+
+			/*
+			 * Si une des deux exceptions est lev√©e, alors il n'existe pas
+			 * d'unificateur entre la clause courante et la clause pass√©e en
+			 * argument. Dans ce cas, null est retourn√©.
+			 */
+			try {
+				equations = Resolution.unifier(equations);
+			} catch (ConflictRuleException e) {
+				return null;
+			} catch (CheckRuleException e) {
+				return null;
+			}
+
+			/*
+			 * Si l'unification s'est bien termin√©e, les deux atomes de la paire
+			 * sont supprim√©s de leur clause respective.
+			 */
+			clauseCourante.getAtomes().remove(premierAtome.toString());
+			clauseCandidate.getAtomes().remove(deuxiemeAtome.toString());
+
+			/*
+			 * La clause courante et la clause candidate sont fusionn√©es, avant
+			 * de se voir appliquer la substitution de variables.
+			 */
+			clauseFinale = clauseCourante.fusionner(clauseCandidate);
+
+			clauseFinale.appliquerSubstitution(equations);
+
+			return clauseFinale;
 		}
 
 		/*
-		 * Si les deux clauses ‡ rÈsoudre ne possËde pas d'atomes contraires,
-		 * pas la peine de chercher ‡ unifier. La fonction retourne null.
+		 * Si les deux clauses √† r√©soudre ne poss√®de pas d'atomes contraires,
+		 * pas la peine de chercher √† r√©soudre. La fonction retourne null.
 		 * 
 		 */
 		else
@@ -199,16 +238,39 @@ public class Clause {
 	}
 
 	/**
+	 * @pre Toutes les equations de la liste equations sont de la forme variable
+	 *      = terme. C'est √† dire le membre gauche de chaque √©quation est de
+	 *      type dynamique Variable et le membre droit est de type statique
+	 *      Terme.
+	 * 
+	 * @param equations,
+	 *            la liste de substitutions √† appliquer √† la clause courante
+	 * 
+	 *            Modifie la clause courante en lui appliquant l'ensemble des
+	 *            substitutions de variables de la liste d'√©quations.
+	 * 
+	 */
+	public void appliquerSubstitution(ArrayList<Equation> equations) {
+
+		if (equations != null)
+			for (Equation e : equations)
+				for (Atome a : getAtomes().values())
+					if (a instanceof AtomeSimple && ((AtomeSimple) a).getPredicat() != null)
+						((AtomeSimple) a).getPredicat().substituerVariable((Variable) e.gauche, e.droit);
+
+	}
+
+	/**
 	 * 
 	 * @param clause,
-	 *            la clause qui sera utilisÈe pour chercher un atome contraire ‡
+	 *            la clause qui sera utilis√©e pour chercher un atome contraire √†
 	 *            un des atomes de la clause courante.
 	 * 
-	 * @return Retourne la premiËre paire d'atomes contraires trouvÈs tel que le
-	 *         premier atome de la paire appartient ‡ la clause courante et le
-	 *         deuxiËme atome de la paire appartient ‡ la clause en paramËtre.
+	 * @return Retourne la premi√®re paire d'atomes contraires trouv√©e tel que le
+	 *         premier atome de la paire appartient √† la clause courante et le
+	 *         deuxi√®me atome de la paire appartient √† la clause en param√®tre.
 	 *         Retourne null si aucune paire d'atomes contraires n'existe entre
-	 *         la clause courante et la clause en paramËtre.
+	 *         la clause courante et la clause en param√®tre.
 	 */
 	public ArrayList<AtomeSimple> selectionnerAtomesContraires(Clause clause) {
 
@@ -221,18 +283,13 @@ public class Clause {
 				 * Si les deux atomes atomeCCourante et atomeCArgument sont des
 				 * atomes simples et si l'un est le contraire de l'autre, alors
 				 * ils vont constituer la paire d'atomes contraires qui sera
-				 * retournÈe.
+				 * retourn√©e.
 				 */
 				if (atomeCCourante instanceof AtomeSimple && atomeCArgument instanceof AtomeSimple
 						&& ((AtomeSimple) atomeCCourante).estLeContraireDe((AtomeSimple) atomeCArgument)) {
 
 					paireAtomesContraires = new ArrayList<>();
 
-					/*
-					 * Utilisation du constructeur par recopie pour dÈrÈfÈrencer
-					 * atomeCCourante et atomeCArgument qui ne doivent pas Ítre
-					 * modifiÈs
-					 */
 					paireAtomesContraires.add((AtomeSimple) atomeCCourante);
 					paireAtomesContraires.add((AtomeSimple) atomeCArgument);
 

@@ -30,8 +30,7 @@ public class PourTout extends Formule {
 
 	@Override
 	public Formule nier() {
-		// TODO Auto-generated method stub
-		return null;
+		return new Non(this);
 	}
 
 	@Override

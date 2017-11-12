@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import resolution.Equation;
 import resolution.cnf.Atome;
 import resolution.cnf.AtomeSimple;
 import resolution.cnf.Clause;
@@ -15,7 +16,7 @@ public class Predicat extends Formule {
 
 	String nom;
 	ArrayList<Terme> args;
-	
+
 	/*
 	 * CONSTRUCTORS
 	 */
@@ -23,7 +24,7 @@ public class Predicat extends Formule {
 		this.nom = p.nom;
 		this.args = new ArrayList<>(p.args);
 	}
-	
+
 	public Predicat(String nom, Terme... args) {
 		super();
 		this.nom = nom;
@@ -33,7 +34,7 @@ public class Predicat extends Formule {
 			this.args.add(t);
 		}
 	}
-	
+
 	/*
 	 * GETTERS AND SETTERS
 	 */
@@ -90,14 +91,14 @@ public class Predicat extends Formule {
 
 	@Override
 	public void substituerVariable(Variable var, Terme t) {
-		
+
 		ArrayList<Terme> nouveauxArgs = new ArrayList<>();
-		
+
 		for (Terme terme : args)
 			nouveauxArgs.add(terme.substituerVariable(var, t));
-		
+
 		args = nouveauxArgs;
-		
+
 	}
 
 	@Override
@@ -105,20 +106,70 @@ public class Predicat extends Formule {
 
 		/*
 		 * Pour chaque terme qui est argument du pr�dicat, ses variables sont
-		 * r�colt�es et ajout�es ou non � la liste des variables libres ou
-		 * li�es.
+		 * récoltées et ajoutées ou non à la liste des variables libres ou
+		 * liées.
 		 */
 		for (Terme t : args)
 			for (String var : t.getVariables().keySet())
 
 				/*
-				 * Si la variable n'est ni dans la liste des variables li��s ni
+				 * Si la variable n'est ni dans la liste des variables liées ni
 				 * dans celle des variables libres, alors c'est une variable
 				 * libre.
 				 */
 				if (!variablesLibres.contains(var) && !variablesLiees.contains(var))
 					variablesLibres.add(var);
 
+	}
+
+	/**
+	 * 
+	 * @param predicat,
+	 *            le predicat qui sera comparer avec le predicat courant pour
+	 *            appliquer le renommage des variables.
+	 * 
+	 *            Modifie le prédicat courant et le prédicat passé en argument,
+	 *            tel qu'à la fin de l'opération les deux prédicats ne possèdent
+	 *            plus aucune variable en commun.
+	 */
+	public void renommerVariables(Predicat predicat) {
+		throw new RuntimeException("NYI method Predicat.renommerVariables(Predicat)");
+	}
+
+	/**
+	 * 
+	 * @param predicat,
+	 *            le prédicat dont les arguments seront couplés avec ceux du
+	 *            prédicat courant pour former la liste d'équations finale.
+	 * 
+	 * @return Une liste d'équations correspondant au couplage des arguments du
+	 *         prédicat courant avec ceux du prédicat en paramètre. Par exemple,
+	 *         pour P(x, a) et P(b, y), la liste d'équations générée est {x = b,
+	 *         a = y}. Si le prédicat courant et le prédicat en paramètre ne
+	 *         sont pas d'arité égale, null est retourné.
+	 * 
+	 */
+	public ArrayList<Equation> genererEquations(Predicat predicat) {
+
+		ArrayList<Equation> equations = new ArrayList<>();
+
+		/*
+		 * Si le predicat courant et le predicat passé en argument ne sont pas
+		 * d'arité égale, alors null est renvoyé.
+		 */
+		if (getArgs().size() != predicat.getArgs().size())
+			return null;
+
+		/*
+		 * Sinon, une équation est créée pour chaque couple de termes du
+		 * predicat courant et du predicat passé en paramètre. Par exemple, pour
+		 * P(x, a) et P(b, y), la liste d'équations générée est {x = b, a = y}
+		 */
+		else
+			for (int i = 0; i < getArgs().size(); i++)
+				equations.add(new Equation(getArgs().get(i), predicat.getArgs().get(i)));
+
+		return equations;
 	}
 
 	@Override

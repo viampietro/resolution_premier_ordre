@@ -17,7 +17,7 @@ public class Resolution {
 	 *            l'ensemble des clauses sur lequel le calcul de resolution va
 	 *            se baser.
 	 * @return Retourne vrai si l'ensemble est insatisfiable, c'est a dire, la
-	 *         clause vide a ete obtenue, faux sinon.
+	 *         clause vide a ete obtenue; faux sinon, alors l'ensemble est satisfiable.
 	 * 
 	 */
 	public static boolean resoudre(ArrayList<Clause> clauses) {
@@ -36,14 +36,14 @@ public class Resolution {
 			clauses.remove(0);
 
 			/*
-			 * Si la clause courante est une clause vide, vrai est retourné
+			 * Si la clause courante est une clause vide, vrai est retournï¿½
 			 */
 			if (clauseCourante.isEmpty())
 				return true;
 
 			/*
 			 * Si la clause courante n'est ni une tautologie, ni incluse dans
-			 * l'ensemble sat, alors le calcul des résolvants est lancé
+			 * l'ensemble sat, alors le calcul des rÃ©solvants est lancÃ©
 			 */
 			else if (!clauseCourante.estUneTautologie() && !clauseCourante.estIncluseDans(sat)) {
 				unionSatClauseCourante = new ArrayList<>(sat);
@@ -58,7 +58,7 @@ public class Resolution {
 
 			}
 
-			// La clause courante est ajoutée à l'ensemble sat
+			// La clause courante est ajoutÃ©e Ã  l'ensemble sat
 			sat.add(clauseCourante);
 		}
 
@@ -74,15 +74,15 @@ public class Resolution {
 		while (aEteModifiee) {
 
 			/*
-			 * aEteModifie est mis à faux afin de quitter la boucle si plus
-			 * aucune modification n'est applicable à l'ensemble des équations.
-			 * Auquel cas, une substitution unificatrice a été trouvée.
+			 * aEteModifie est mis Ã  faux afin de quitter la boucle si plus
+			 * aucune modification n'est applicable Ã  l'ensemble des Ã©quations.
+			 * Auquel cas, une substitution unificatrice a Ã©tÃ© trouvÃ©e.
 			 */
 			aEteModifiee = false;
 
 			/*
-			 * Boucle à l'envers, pour ne pas être dérangé par les délétions sur
-			 * l'ensemble des équations.
+			 * Boucle Ã  l'envers, pour ne pas Ãªtre dÃ©rangÃ© par les dÃ©lÃ©tions sur
+			 * l'ensemble des Ã©quations.
 			 */
 			for (int i = equations.size() - 1; i >= 0; i--) {
 				eqCourante = equations.get(i);
@@ -102,7 +102,7 @@ public class Resolution {
 						equations.remove(i);
 
 						/*
-						 * On spécifie qu'une modification a eu lieue pour
+						 * On spÃ©cifie qu'une modification a eu lieue pour
 						 * continuer de boucler
 						 */
 						aEteModifiee = true;
@@ -118,7 +118,7 @@ public class Resolution {
 					equations.remove(i);
 
 					/*
-					 * On spécifie qu'une modification a eu lieue pour continuer
+					 * On spÃ©cifie qu'une modification a eu lieue pour continuer
 					 * de boucler
 					 */
 					aEteModifiee = true;
@@ -127,8 +127,8 @@ public class Resolution {
 				} else if (eqCourante.gauche instanceof Variable) {
 
 					/*
-					 * On procède à l'élimination si le variable à gauche de
-					 * l'équation n'est pas incluse dans la partie droite
+					 * On procÃ¨de Ã  l'Ã©limination si le variable Ã  gauche de
+					 * l'Ã©quation n'est pas incluse dans la partie droite
 					 */
 					if (!eqCourante.gauche.estInclusDans(eqCourante.droit)) {
 						/*
@@ -138,15 +138,15 @@ public class Resolution {
 						equations.remove(i);
 
 						/*
-						 * aEteModifiee est à vrai si la methode eliminer a
-						 * engendrée des changements dans la liste d'équations
+						 * aEteModifiee est Ã  vrai si la methode eliminer() a
+						 * engendrÃ©e des changements dans la liste d'Ã©quations
 						 */
 						aEteModifiee = aEteModifiee
 								|| eliminer(equations, (Variable) eqCourante.gauche, eqCourante.droit);
 
 						/*
-						 * Ajout de l'équation précédemment enlevée de la liste
-						 * pour procéder à la substitution
+						 * Ajout de l'Ã©quation prÃ©cÃ©demment enlevÃ©e de la liste
+						 * pour permettre la substitution
 						 */
 						equations.add(eqCourante);
 					} else
@@ -162,16 +162,16 @@ public class Resolution {
 	/**
 	 * 
 	 * @param f,
-	 *            un fonction possédant le même nom et le même nombre
+	 *            un fonction possÃ©dant le mÃªme nom et le mÃªme nombre
 	 *            d'arguments que la fonction g.
 	 * @param g,
-	 *            un fonction possédant le même nom et le même nombre
+	 *            un fonction possÃ©dant le mÃªme nom et le mÃªme nombre
 	 *            d'arguments que la fonction f.
 	 * 
-	 * @return Retourne une liste d'équations correspondant à la mise en
-	 *         équation de chaque couple d'arguments de f et g. Par exemple,
-	 *         pour f(x,a) et g(b, y), on créé l'ensemble d'équations {x = b, a
-	 *         = y} puis cet ensemble est unifié avant d'être retourné.
+	 * @return Retourne une liste d'Ã©quations correspondant Ã  la mise en
+	 *         Ã©quation de chaque couple d'arguments de f et g. Par exemple,
+	 *         pour f(x,a) et f(b, y), on crÃ©e l'ensemble d'Ã©quations {x = b, a
+	 *         = y} puis cet ensemble est unifiÃ© avant d'Ãªtre retournÃ©.
 	 */
 	private static ArrayList<Equation> decomposer(Fonction f, Fonction g)
 			throws ConflictRuleException, CheckRuleException {
@@ -186,9 +186,9 @@ public class Resolution {
 		for (int i = 0; i < f.getArgs().size(); i++) {
 
 			/*
-			 * On créé une équatiopn pour chaque couple d'arguments de f et g.
-			 * Par exemple, pour f(x,a) et g(b, y), on créé l'ensemble
-			 * d'équations {x = b, a = y}.
+			 * On crÃ©e une Ã©quatiopn pour chaque couple d'arguments de f et g.
+			 * Par exemple, pour f(x,a) et f(b, y), on crÃ©e l'ensemble
+			 * d'Ã©quations {x = b, a = y}.
 			 * 
 			 */
 			equation = new Equation(f.getArgs().get(i), g.getArgs().get(i));
@@ -201,17 +201,17 @@ public class Resolution {
 	/**
 	 * 
 	 * @param equations,
-	 *            liste d'équations dans laquelle va être appliquée la
+	 *            liste d'Ã©quations dans laquelle va Ãªtre appliquÃ©e la
 	 *            substitution
 	 * @param substituee,
-	 *            la variable à substituer si rencontrée dans les équations de
+	 *            la variable Ã  substituer si rencontrÃ©e dans les Ã©quations de
 	 *            la liste
 	 * @param substitut,
 	 *            terme par lequel substituer la variable
 	 * 
-	 * @return Applique la substitution sur l'ensemble des éléments de la liste
-	 *         d'équations. Retourne vrai si au moins une des équations de la
-	 *         liste a été modifiée par substitution et faux sinon.
+	 * @return Applique la substitution sur l'ensemble des Ã©lÃ©ments de la liste
+	 *         d'Ã©quations. Retourne vrai si au moins une des Ã©quations de la
+	 *         liste a Ã©tÃ© modifiÃ©e par substitution et faux sinon.
 	 */
 	private static boolean eliminer(ArrayList<Equation> equations, Variable substituee, Terme substitut) {
 
@@ -220,21 +220,21 @@ public class Resolution {
 		Terme gaucheSubstitue = null;
 		Terme droitSubstitue = null;
 
-		// Application de la substitution sur toutes les équations
+		// Application de la substitution sur toutes les ï¿½quations
 		// de la liste
 		for (Equation e : equations) {
 
 			/*
 			 * Application de la substitution sur les deux branches de
-			 * l'équation et récupération des résultats
+			 * l'Ã©quation et rÃ©cupÃ©ration des rÃ©sultats
 			 */
 			gaucheSubstitue = e.gauche.substituerVariable(substituee, substitut);
 			droitSubstitue = e.droit.substituerVariable(substituee, substitut);
 
 			/*
-			 * Si la branche gauche a été modifiée par la substitution, on
-			 * conserve la branche gauche substituée et on indique qu'une
-			 * modification a eu lieue dans la liste d'équations
+			 * Si la branche gauche a Ã©tÃ© modifiÃ©e par la substitution, on
+			 * conserve la branche gauche substituÃ©e et on indique qu'une
+			 * modification a eu lieue dans la liste d'Ã©quations
 			 */
 			if (!e.gauche.equals(gaucheSubstitue)) {
 				e.gauche = gaucheSubstitue;
@@ -242,7 +242,7 @@ public class Resolution {
 			}
 
 			/*
-			 * La même chose qu'au-dessus pour la branche droite
+			 * La mÃªme chose qu'au-dessus pour la branche droite
 			 */
 			if (!e.droit.equals(droitSubstitue)) {
 				e.droit = droitSubstitue;

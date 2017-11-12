@@ -35,31 +35,16 @@ public class Main {
 		PourTout forall = new PourTout(x, new Implication(new Predicat("P", x),
 				new IlExiste(y, new Ou(new Predicat("P", y), new Predicat("Q", y)))));
 
-		Ou ou = new Ou(new Predicat("P", x), forall);
-		Non n = new Non(ou);
+		IlExiste ilexiste = new IlExiste(x,
+				new Implication(
+						new Predicat("P", x), 
+						new Et(new Predicat("P", a), new Predicat("P", b))));
 
-		// n.recolterVariables();
-		// System.out.println(n.skolemiser().clausifier());
+		System.out.println("La formule " + forall + " est-elle valide ? "
+				+ Resolution.resoudre(forall.nier().skolemiser().clausifier()));
 		
-		Clause c = new Clause();
-		c.getAtomes().put("P(x)", new AtomeSimple(false, new Predicat("P", x)));
-		c.getAtomes().put("!P(x)", new AtomeSimple(true, new Predicat("P", x)));
-		
-		Clause c1 = new Clause();
-		c1.getAtomes().put("!P(y)", new AtomeSimple(true, null));
-		c1.getAtomes().put("P(x)", new AtomeSimple(false, new Predicat("P", x)));
-		
-//		System.out.println("C is a tautology : " + c.estUneTautologie());
-		
-		ArrayList<Clause> clauses = new ArrayList<>();
-		clauses.add(c1);
-		
-//		System.out.println("C is included in clauses : " + c.estIncluseDans(clauses));
-//		System.out.println("Clause set is unsatisfiable : " + Resolution.resoudre(clauses));
-		
-		System.out.println("Selected atoms pair : " + c.selectionnerAtomesContraires(c1));
-		System.out.println("Resolution result : " + c.resoudreAvec(c1));
-		
+		System.out.println("La formule " + ilexiste + " est-elle valide ? "
+				+ Resolution.resoudre(ilexiste.nier().skolemiser().clausifier()));
 	}
 
 }
