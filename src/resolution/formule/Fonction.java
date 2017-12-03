@@ -61,14 +61,20 @@ public class Fonction extends Terme {
 		this.nom = "f$" + compteur;
 
 		/*
-		 * la valeur du compteur est augment� apr�s nommage pour s'assurer de
-		 * l'unicit� des noms de fonctions.
+		 * la valeur du compteur est augmenté après nommage pour s'assurer de
+		 * l'unicité des noms de fonctions.
 		 */
 		compteur++;
 
 		this.args = new ArrayList<Terme>(args);
 	}
 	
+	public Fonction(String nom, ArrayList<Terme> termes) {
+		this.nom = nom;
+		this.args = new ArrayList<Terme>(termes);
+		
+	}
+
 	/************************************************************************
 	 *                          GETTERS & SETTERS
 	 ************************************************************************/

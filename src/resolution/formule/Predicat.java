@@ -35,6 +35,11 @@ public class Predicat extends Formule {
 		}
 	}
 
+	public Predicat(String nom, ArrayList<Terme> args) {
+		this.nom = nom;
+		this.args = new ArrayList<>(args);
+	}
+
 	/*
 	 * GETTERS AND SETTERS
 	 */
