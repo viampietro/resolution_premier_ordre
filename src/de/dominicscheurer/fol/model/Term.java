@@ -23,7 +23,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 import resolution.formule.Fonction;
-import resolution.formule.Formule;
 import resolution.formule.Terme;
 import resolution.formule.Variable;
 

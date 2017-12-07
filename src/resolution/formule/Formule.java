@@ -7,20 +7,14 @@ import resolution.cnf.Clause;
 public abstract class Formule {
 
 	/**
-	 * Pour l'instant, chaque variable, libre ou liée, composant une formule est
-	 * nommée de manière unique. La redondance du nom des variables sera prise
-	 * en compte plus tard.
-	 */
-
-	/**
-	 * Liste des variables libres de la formule. Remplie par la méthode
+	 * Liste des variables libres de la formule. Remplie par la mÃ©thode
 	 * recolterVariablesLibres().
 	 * 
 	 */
 	public static ArrayList<String> variablesLibres = new ArrayList<>();
 
 	/**
-	 * Liste des variables liées de la formule. Remplie par la méthode
+	 * Liste des variables liÃ©es de la formule. Remplie par la mÃ©thode
 	 * recolterVariables().
 	 * 
 	 */
@@ -28,19 +22,19 @@ public abstract class Formule {
 
 	/**
 	 * Remplit les attributs statiques variablesLibres et variablesLiees en
-	 * parcourant la formule courante et en ajoutant les variables rencontrées
+	 * parcourant la formule courante et en ajoutant les variables rencontrÃ©es
 	 * soit dans la liste des variables libres, soit dans celle des variables
-	 * liées.
+	 * liÃ©es.
 	 */
 	public abstract void recolterVariables();
 
 	/**
 	 * 
-	 * Substitue toutes les occurences de la Variable var présentes dans
-	 * la formule courante par le Terme t. 
+	 * Substitue toutes les occurences de la Variable var prÃ©sentes dans la
+	 * formule courante par le Terme t.
 	 * 
 	 * @param var,
-	 *            la variable à substituer par le terme t dans la formule
+	 *            la variable Ã  substituer par le terme t dans la formule
 	 *            courante.
 	 * @param t,
 	 *            le terme par lequel substituer la variable var dans la formule
@@ -50,52 +44,110 @@ public abstract class Formule {
 
 	/**
 	 * 
-	 * @return retourne une formule correspondant à la formule courante à
-	 *         laquelle a été appliqué un non.
+	 * @return retourne la formule courante dans son forme niÃ©e.
 	 */
 	public abstract Formule nier();
 
 	/**
-	 * @pre la formule courante n'est pas un quantifieur.
+	 * @pre la formule courante n'est pas un quantificateur.
 	 * 
-	 * @return retourne une formule correspondant à la formule courante à
-	 *         laquelle a été appliquée les règles de transformations facilitant
-	 *         la passage à la forme CNF. Lance une
-	 *         CantSimplifyQuantifierException si la formule courante est un
-	 *         quantifieur
+	 * @return retourne une formule correspondant Ã  la formule courante Ã 
+	 *         laquelle a Ã©tÃ© appliquÃ©e les rÃ¨gles de transformations facilitant
+	 *         la passage Ã  la forme CNF. Les rÃ¨gles de transformation ont la
+	 *         plupart du temps pour effet de supprimer les Top et les Bottom de
+	 *         la formule. Lance une CantSimplifyQuantifierException si la
+	 *         formule courante est un quantificateur.
 	 */
 	public abstract Formule simplifier();
 
 	/**
 	 * 
-	 * @pre le formule courante a été simplifier avec la méthode simplifier()
-	 *      avant d'être clausifier.
+	 * @pre le formule courante a Ã©tÃ© simplifiÃ©e avec la mÃ©thode simplifier()
+	 *      avant d'Ãªtre clausifier.
 	 * 
-	 * @return retourne une liste d'Objets de type Clause (contenant eux-mêmes
-	 *         une liste d'atomes) qui correspond à la mise en forme CNF de la
+	 * @return retourne une liste d'Objets de type Clause (contenant eux-mÃªmes
+	 *         une liste d'atomes) qui correspond Ã  la mise en forme CNF de la
 	 *         formule courante. Lance une CantCNFQuantifierException si la
-	 *         formule courante est un quantifieur.
+	 *         formule courante est un quantificateur.
 	 */
 	public abstract ArrayList<Clause> clausifier();
 
 	/**
 	 * 
-	 * @return retourne une formule correspondant à la formule courante sous sa
-	 *         forme universelle.
+	 * @return retourne la formule courante sous sa forme universelle, sans
+	 *         quantificateur.
 	 */
 	public abstract Formule skolemiser();
 
 	/**
 	 * 
-	 * @return retourne une formule correspondant à la formule courante sous sa
-	 *         forme existentielle.
+	 * @return retourne la formule courante sous sa forme existentielle, , sans
+	 *         quantificateur.
 	 */
 	public abstract Formule herbrandiser();
 
 	/**
 	 * 
-	 * @return Retourne une chaîne de caractères représentant la formule
-	 *         courante sous forme bien parenthésée.
+	 * @return Retourne vrai si la formule courante est valide; faux indique la
+	 *         formule est satisfiable.
+	 * 
+	 */
+	public boolean resoudre() {
+
+		ArrayList<Clause> clauses = nier().skolemiser().simplifier().clausifier();
+
+		ArrayList<Clause> sat = new ArrayList<Clause>();
+		ArrayList<Clause> unionSatClauseCourante = new ArrayList<>();
+		Clause clauseCourante = null;
+		Clause clauseResolvante = null;
+
+		while (!clauses.isEmpty()) {
+
+			/*
+			 * Choisit la premiere clause et la supprime de la liste courante
+			 */
+			clauseCourante = clauses.get(0);
+			clauses.remove(0);
+
+			/*
+			 * Si la clause courante est une clause vide, vrai est retournï¿½
+			 */
+			if (clauseCourante.isEmpty())
+				return true;
+
+			/*
+			 * Si la clause courante n'est ni une tautologie, ni incluse dans
+			 * l'ensemble sat, alors le calcul des rÃ©solvants est lancÃ©
+			 */
+			else if (!clauseCourante.estUneTautologie() && !clauseCourante.estIncluseDans(sat)) {
+
+				/**
+				 * Nouvel ensemble de clauses rÃ©sultant de l'union de l'ensemble
+				 * sat et de la variable clauseCourante.
+				 */
+				unionSatClauseCourante = new ArrayList<>(sat);
+				unionSatClauseCourante.add(clauseCourante);
+
+				for (Clause c : unionSatClauseCourante) {
+					clauseResolvante = c.resoudreAvec(clauseCourante);
+
+					if (clauseResolvante != null)
+						clauses.add(clauseResolvante);
+				}
+
+			}
+
+			// La clause courante est ajoutÃ©e Ã  l'ensemble sat
+			sat.add(clauseCourante);
+		}
+
+		return false;
+	}
+
+	/**
+	 * 
+	 * @return Retourne une chaÃ®ne de caractÃ¨res reprÃ©sentant la formule
+	 *         courante sous forme bien parenthÃ©sÃ©e.
 	 */
 	public abstract String toStringWithParenthesis();
 

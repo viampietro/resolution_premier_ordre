@@ -7,7 +7,6 @@ import java.util.Map;
 import resolution.CheckRuleException;
 import resolution.ConflictRuleException;
 import resolution.Equation;
-import resolution.Resolution;
 import resolution.formule.Variable;
 
 public class Clause {
@@ -167,9 +166,9 @@ public class Clause {
 	 * @post la clause courante et la clause en paramètre n'ont pas été
 	 *       modifiées durant l'opération.
 	 * @param clause,
-	 *            la clause avec laquelle la clause courante va être résolue
-	 * @return La clause resolvante de la règle de résolution, si cette règle a
-	 *         pu s'appliquer entre la clause en parametre et la clause
+	 *            la clause avec laquelle la clause courante va être résolue.
+	 * @return Retourne la clause résolvante de la règle de résolution, si cette
+	 *         règle a pu s'appliquer entre la clause en paramètre et la clause
 	 *         courante. null, si la règle de résolution n'était pas applicable.
 	 * 
 	 */
@@ -202,7 +201,7 @@ public class Clause {
 			 * argument. Dans ce cas, null est retourné.
 			 */
 			try {
-				equations = Resolution.unifier(equations);
+				equations = Equation.unifier(equations);
 			} catch (ConflictRuleException e) {
 				return null;
 			} catch (CheckRuleException e) {

@@ -25,51 +25,51 @@ import resolution.formule.PourTout;
 import resolution.formule.Variable;
 
 public class Universal implements Formula {
-    private Formula subformula = null;
-    private Term quantifiedVar = null;
+	private Formula subformula = null;
+	private Term quantifiedVar = null;
 
-    public Universal(Formula subformula, Term quantifiedVar) {
-        this.subformula = subformula;
-        this.quantifiedVar = quantifiedVar;
-    }
+	public Universal(Formula subformula, Term quantifiedVar) {
+		this.subformula = subformula;
+		this.quantifiedVar = quantifiedVar;
+	}
 
-    public Formula getSubformula() {
-        return subformula;
-    }
+	public Formula getSubformula() {
+		return subformula;
+	}
 
-    public void setSubformula(Formula subformula) {
-        this.subformula = subformula;
-    }
+	public void setSubformula(Formula subformula) {
+		this.subformula = subformula;
+	}
 
-    public Term getQuantifiedVar() {
-        return quantifiedVar;
-    }
+	public Term getQuantifiedVar() {
+		return quantifiedVar;
+	}
 
-    public void setQuantifiedVar(Term quantifiedVar) {
-        this.quantifiedVar = quantifiedVar;
-    }
+	public void setQuantifiedVar(Term quantifiedVar) {
+		this.quantifiedVar = quantifiedVar;
+	}
 
-    @Override
-    public void substitute(Term term, Term forVar) {
-        if (!forVar.equals(quantifiedVar)) {
-            subformula.substitute(term, forVar);
-        }
-    }
+	@Override
+	public void substitute(Term term, Term forVar) {
+		if (!forVar.equals(quantifiedVar)) {
+			subformula.substitute(term, forVar);
+		}
+	}
 
-    @Override
-    public Set<Term> freeVars() {
-        Set<Term> freeVars = subformula.freeVars();
-        freeVars.remove(quantifiedVar);
-        return freeVars;
-    }
-    
-    @Override
-    public String toString() {
-        return "forall " + quantifiedVar.toString() + ". " + subformula.toString();
-    }
+	@Override
+	public Set<Term> freeVars() {
+		Set<Term> freeVars = subformula.freeVars();
+		freeVars.remove(quantifiedVar);
+		return freeVars;
+	}
+
+	@Override
+	public String toString() {
+		return "forall " + quantifiedVar.toString() + ". " + subformula.toString();
+	}
 
 	@Override
 	public Formule toVincentFormula() {
-		return new PourTout((Variable)quantifiedVar.toVincentTerm(), subformula.toVincentFormula());
+		return new PourTout((Variable) quantifiedVar.toVincentTerm(), subformula.toVincentFormula());
 	}
 }

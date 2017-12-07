@@ -19,13 +19,12 @@ package de.dominicscheurer.fol.model;
 
 import java.util.Set;
 
-import resolution.formule.Formule;
-
 /**
  * Created by nstouls on 22/08/2016.
  */
 public interface VariableContainer {
-  public void substitute(Term term, Term forVar);
-  public Set<Term> freeVars();
-  
+	public void substitute(Term term, Term forVar);
+
+	public Set<Term> freeVars();
+
 }

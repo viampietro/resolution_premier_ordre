@@ -1,27 +1,14 @@
 package client;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.logging.Logger;
 
 import de.dominicscheurer.fol.parser.FOLParser;
 import de.dominicscheurer.fol.parser.ParseException;
-import resolution.CheckRuleException;
-import resolution.ConflictRuleException;
-import resolution.Equation;
-import resolution.Resolution;
-import resolution.cnf.AtomeSimple;
-import resolution.cnf.Clause;
-import resolution.formule.Et;
-import resolution.formule.Fonction;
 import resolution.formule.Formule;
-import resolution.formule.IlExiste;
-import resolution.formule.Implication;
-import resolution.formule.Non;
-import resolution.formule.Ou;
-import resolution.formule.PourTout;
-import resolution.formule.Predicat;
-import resolution.formule.Top;
-import resolution.formule.Variable;
+import resolution.logger.LogMessage;
+import resolution.logger.LoggerAspect;
+
 
 public class Main {
 
@@ -54,9 +41,18 @@ public class Main {
 		
 		try {
 			
-			Formule f = FOLParser.parse("forall X. (p(X) -> exists Y. (p(Y) | q(Y)))");
-			System.out.println(f + " valide ? ");
-			System.out.println(Resolution.resoudre(f.nier().skolemiser().clausifier()));
+			
+			
+			Formule f = FOLParser.parse("forall X. (p(X) -> exists Y. ((p(Y) | q(Y)) | bottom))");
+			
+			System.out.println(f + " valide ? " + f.resoudre());
+			
+			LoggerAspect logger = LoggerAspect.aspectOf();
+			ArrayList<LogMessage> logs = logger.getLogMessages();
+			
+			logs.stream().forEach(m -> {
+				System.out.println(m.toString());
+			});
 			
 		} catch (ParseException e) {
 			e.printStackTrace();
