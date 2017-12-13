@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with FirstOrderParser.  If not, see <http://www.gnu.org/licenses/>.
  */
-package de.dominicscheurer.fol.model;
+package resolution.parser;
 
 import java.util.Set;
 

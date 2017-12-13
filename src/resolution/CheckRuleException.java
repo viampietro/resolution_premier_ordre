@@ -16,7 +16,7 @@ public class CheckRuleException extends Exception {
 	
 	@Override
 	public String getMessage() {
-		return "Equation non unifiable : " + e;
+		return "Inclusion entre " + e.gauche + " et " + e.droit;
 	}
 	
 }

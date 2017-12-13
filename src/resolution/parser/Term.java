@@ -16,7 +16,7 @@
  * along with FirstOrderParser.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.dominicscheurer.fol.model;
+package resolution.parser;
 
 import java.util.ArrayList;
 import java.util.HashSet;

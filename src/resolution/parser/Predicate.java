@@ -16,45 +16,25 @@
  * along with FirstOrderParser.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.dominicscheurer.fol.model;
+package resolution.parser;
 
-import java.util.Set;
+public class Predicate {
+    private String identifier = "";
 
-import resolution.formule.Formule;
-import resolution.formule.Non;
-
-public class Negated implements Formula {
-    private Formula subformula = null;
-
-    public Formula getSubformula() {
-        return subformula;
+    public Predicate(String identifier) {
+        this.identifier = identifier;
     }
 
-    public void setSubformula(Formula subformula) {
-        this.subformula = subformula;
+    public String getIdentifier() {
+        return identifier;
     }
 
-    public Negated(Formula subformula) {
-        this.subformula = subformula;
-    }
-
-    @Override
-    public void substitute(Term term, Term forVar) {
-        subformula.substitute(term, forVar);
-    }
-
-    @Override
-    public Set<Term> freeVars() {
-        return subformula.freeVars();
+    public void setIdentifier(String identifier) {
+        this.identifier = identifier;
     }
     
     @Override
     public String toString() {
-        return "!" + subformula.toString();
+        return identifier;
     }
-
-	@Override
-	public Formule toVincentFormula() {
-		return new Non(subformula.toVincentFormula());
-	}
 }

@@ -66,8 +66,8 @@ public class Predicat extends Formule {
 	public ArrayList<Clause> clausifier() {
 
 		/**
-		 * Retourne une liste contenant une unique Clause qui elle m�me contient
-		 * un unique atome correspondant au pr�dicat courant
+		 * Retourne une liste contenant une unique Clause qui elle même contient
+		 * un unique atome correspondant au prédicat courant
 		 */
 		Atome a = new AtomeSimple(false, this);
 
@@ -99,9 +99,9 @@ public class Predicat extends Formule {
 
 		ArrayList<Terme> nouveauxArgs = new ArrayList<>();
 
-		for (Terme terme : args)
+		for (Terme terme : args) {
 			nouveauxArgs.add(terme.substituerVariable(var, t));
-
+		}
 		args = nouveauxArgs;
 
 	}
@@ -110,7 +110,7 @@ public class Predicat extends Formule {
 	public void recolterVariables() {
 
 		/*
-		 * Pour chaque terme qui est argument du pr�dicat, ses variables sont
+		 * Pour chaque terme qui est argument du prédicat, ses variables sont
 		 * récoltées et ajoutées ou non à la liste des variables libres ou
 		 * liées.
 		 */

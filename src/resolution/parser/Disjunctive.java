@@ -16,59 +16,59 @@
  * along with FirstOrderParser.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.dominicscheurer.fol.model;
+package resolution.parser;
 
 import java.util.Set;
 
 import resolution.formule.Formule;
-import resolution.formule.Implication;
+import resolution.formule.Ou;
 
-public class Implicative implements Formula {
-    private Formula premise = null, conclusion = null;
+public class Disjunctive implements Formula {
+    private Formula subformulaA = null, subformulaB = null;
 
-    public Implicative(Formula premise, Formula conclusion) {
-        this.premise = premise;
-        this.conclusion = conclusion;
+    public Disjunctive(Formula subformulaA, Formula subformulaB) {
+        this.subformulaA = subformulaA;
+        this.subformulaB = subformulaB;
     }
 
-    public Formula getPremise() {
-        return premise;
+    public Formula getSubformulaA() {
+        return subformulaA;
     }
 
-    public void setPremise(Formula premise) {
-        this.premise = premise;
+    public void setSubformulaA(Formula subformulaA) {
+        this.subformulaA = subformulaA;
     }
 
-    public Formula getConclusion() {
-        return conclusion;
+    public Formula getSubformulaB() {
+        return subformulaB;
     }
 
-    public void setConclusion(Formula conclusion) {
-        this.conclusion = conclusion;
+    public void setSubformulaB(Formula subformulaB) {
+        this.subformulaB = subformulaB;
     }
 
     @Override
     public void substitute(Term term, Term forVar) {
-        premise.substitute(term, forVar);
-        conclusion.substitute(term, forVar);
+        subformulaA.substitute(term, forVar);
+        subformulaB.substitute(term, forVar);
     }
 
     @Override
     public Set<Term> freeVars() {
-        Set<Term> freeVars = premise.freeVars();
-        freeVars.addAll(conclusion.freeVars());
+        Set<Term> freeVars = subformulaA.freeVars();
+        freeVars.addAll(subformulaB.freeVars());
         
         return freeVars;
     }
     
     @Override
     public String toString() {
-        return "(" + premise.toString() + " -> " + conclusion.toString() + ")";
+        return "(" + subformulaA.toString() + " | " + subformulaB.toString() + ")";
     }
 
 	@Override
 	public Formule toVincentFormula() {
 		
-		return new Implication(premise.toVincentFormula(), conclusion.toVincentFormula());
+		return new Ou(subformulaA.toVincentFormula(), subformulaB.toVincentFormula());
 	}
 }

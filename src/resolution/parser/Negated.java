@@ -16,59 +16,45 @@
  * along with FirstOrderParser.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.dominicscheurer.fol.model;
+package resolution.parser;
 
 import java.util.Set;
 
 import resolution.formule.Formule;
-import resolution.formule.Ou;
+import resolution.formule.Non;
 
-public class Disjunctive implements Formula {
-    private Formula subformulaA = null, subformulaB = null;
+public class Negated implements Formula {
+    private Formula subformula = null;
 
-    public Disjunctive(Formula subformulaA, Formula subformulaB) {
-        this.subformulaA = subformulaA;
-        this.subformulaB = subformulaB;
+    public Formula getSubformula() {
+        return subformula;
     }
 
-    public Formula getSubformulaA() {
-        return subformulaA;
+    public void setSubformula(Formula subformula) {
+        this.subformula = subformula;
     }
 
-    public void setSubformulaA(Formula subformulaA) {
-        this.subformulaA = subformulaA;
-    }
-
-    public Formula getSubformulaB() {
-        return subformulaB;
-    }
-
-    public void setSubformulaB(Formula subformulaB) {
-        this.subformulaB = subformulaB;
+    public Negated(Formula subformula) {
+        this.subformula = subformula;
     }
 
     @Override
     public void substitute(Term term, Term forVar) {
-        subformulaA.substitute(term, forVar);
-        subformulaB.substitute(term, forVar);
+        subformula.substitute(term, forVar);
     }
 
     @Override
     public Set<Term> freeVars() {
-        Set<Term> freeVars = subformulaA.freeVars();
-        freeVars.addAll(subformulaB.freeVars());
-        
-        return freeVars;
+        return subformula.freeVars();
     }
     
     @Override
     public String toString() {
-        return "(" + subformulaA.toString() + " | " + subformulaB.toString() + ")";
+        return "!" + subformula.toString();
     }
 
 	@Override
 	public Formule toVincentFormula() {
-		
-		return new Ou(subformulaA.toVincentFormula(), subformulaB.toVincentFormula());
+		return new Non(subformula.toVincentFormula());
 	}
 }

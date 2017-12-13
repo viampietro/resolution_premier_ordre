@@ -53,7 +53,7 @@ public class PourTout extends Formule {
 	public Formule herbrandiser() {
 
 		/*
-		 * Une nouvelle fonction est cr��e avec en arguments
+		 * Une nouvelle fonction est créée avec en arguments
 		 * l'ensemble des variables libres du contexte.
 		 */
 		ArrayList<Terme> args = new ArrayList<>();

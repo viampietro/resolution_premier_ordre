@@ -8,8 +8,8 @@ public class Fonction extends Terme {
 	String nom;
 	ArrayList<Terme> args;
 
-	/*
-	 * contribuer a generer des nouveaux symboles de fonctions a la demande.
+	/**
+	 * Contribue a generer de nouveaux symboles de fonctions a la demande.
 	 */
 	private static int compteur = 0;
 	
@@ -34,7 +34,7 @@ public class Fonction extends Terme {
 
 	/**
 	 * Constructeur seuleument accessible dans le package resolution.formule.
-	 * Utilis� pour la cr�ation de symboles de fonctions pseudo-al�atoires lors
+	 * Utilisé pour la création de symboles de fonctions pseudo-aléatoires lors
 	 * de la skolemisation ou de l'hebrandisation des quantificateurs universels
 	 * ou existentiels.
 	 * 
@@ -45,8 +45,8 @@ public class Fonction extends Terme {
 		this.nom = "f$" + compteur;
 
 		/*
-		 * la valeur du compteur est augment� apr�s nommage pour s'assurer de
-		 * l'unicit� des noms de fonctions.
+		 * la valeur du compteur est augmentée après nommage pour s'assurer de
+		 * l'unicité des noms de fonctions.
 		 */
 		compteur++;
 
@@ -129,19 +129,20 @@ public class Fonction extends Terme {
 	@Override
 	public boolean estInclusDans(Terme t) {
 		
-		boolean estInclus = false;
-		
-		if (t instanceof Fonction) {
+		if (t instanceof Fonction && t != null) {
 			
 			Fonction f = (Fonction) t;
-			estInclus = equals(t); 
-		
+			
+			if (equals(f))
+				return true;
+			
 			for (Terme arg : f.getArgs())
-				estInclus = estInclus || estInclusDans(arg);
+				if (estInclusDans(arg))
+					return true;
 		
 		}
 		
-		return estInclus;
+		return false;
 	}
 
 	@Override

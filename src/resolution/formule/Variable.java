@@ -21,14 +21,14 @@ public class Variable extends Terme {
 	}
 	
 	/**
-	 * Si la variable courante à le même nom que la variable en argument
-	 * alors le terme t est renvoyé (var est substituée par t).
-	 * Sinon c'est la variable courante qui est renvoyée.
+	 * Si la variable courante Ã  le mÃªme nom que la variable en argument
+	 * alors le terme t est renvoyÃ© (var est substituÃ©e par t).
+	 * Sinon c'est la variable courante qui est renvoyÃ©e (pas de substitution).
 	 */
 	@Override
 	public Terme substituerVariable(Variable var, Terme t) {
 		
-		if (nom == var.nom)
+		if (nom.equals(var.nom))
 			return t;
 	
 		return this;

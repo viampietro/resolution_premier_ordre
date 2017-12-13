@@ -16,25 +16,17 @@
  * along with FirstOrderParser.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.dominicscheurer.fol.model;
+package resolution.parser;
 
-public class Predicate {
-    private String identifier = "";
+import resolution.formule.Formule;
 
-    public Predicate(String identifier) {
-        this.identifier = identifier;
-    }
-
-    public String getIdentifier() {
-        return identifier;
-    }
-
-    public void setIdentifier(String identifier) {
-        this.identifier = identifier;
-    }
-    
-    @Override
-    public String toString() {
-        return identifier;
-    }
+/**
+ * Basic interface for formulas.
+ * 
+ * @author Dominic Scheurer
+ */
+public interface Formula extends VariableContainer {
+	
+	public Formule toVincentFormula();
+	
 }

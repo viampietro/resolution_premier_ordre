@@ -6,41 +6,41 @@ public abstract class Terme {
 
 	/**
 	 * 
-	 * @return Retourne la liste des variables qui sont présentes dans le
+	 * @return Retourne la liste des variables qui sont prÃ©sentes dans le
 	 *         terme. Si le terme est une variable une liste contenant la seule
-	 *         variable est retournée. Sinon si le terme est une fonction,
-	 *         l'union de toutes les variables argument de la fonction avec les
-	 *         variables des fonctions imbriquées est retournée.
+	 *         variable est retournÃ©e. Sinon si le terme est une fonction,
+	 *         l'union de toutes les variables "arguments" de la fonction avec les
+	 *         variables des fonctions imbriquÃ©es est retournÃ©e.
 	 */
 	public abstract HashMap<String, Variable> getVariables();
 
 	/**
 	 * 
 	 * @param var,
-	 *            la variable à substituer par le terme t si présente dans le
+	 *            la variable Ã  substituer par le terme t si prÃ©sente dans le
 	 *            terme courant.
 	 * @param t,
 	 *            le terme de substitution pour la variable var.
 	 * 
 	 * @return Retourne le terme courant dans lequel chaque occurrence de la
-	 *         variable var a été remplacée par le terme t.
+	 *         variable var a Ã©tÃ© remplacÃ©e par le terme t.
 	 */
 	public abstract Terme substituerVariable(Variable var, Terme t);
 
 	/**
 	 * 
 	 * @param t,
-	 *            le terme dans lequel va être recherché le terme courant pour
-	 *            vérifier.
+	 *            le terme dans lequel va Ãªtre recherchÃ© le terme courant pour
+	 *            vÃ©rifier son inclusion.
 	 * 
-	 * @return Vrai si le terme courant est inclus ou égal au terme t, faux
+	 * @return Vrai si le terme courant est inclus ou Ã©gal au terme t, faux
 	 *         sinon.
 	 */
 	public abstract boolean estInclusDans(Terme t);
 
 	/**
-	 * Retourne vrai si la représentation des deux termes par chaîne de
-	 * caractères est égale.
+	 * Retourne vrai si la reprÃ©sentation des deux termes par chaÃ®ne de
+	 * caractÃ¨res est Ã©gale.
 	 */
 	@Override
 	public boolean equals(Object obj) {

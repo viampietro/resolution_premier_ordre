@@ -2,9 +2,13 @@ package resolution.logger;
 
 public enum LogMessageType {
 	
+	STARTING_CNF("Forme clausale de départ"),
 	LAUNCH_RESOLUTION("Lancement de résolution"),
 	UNIFIER_FOUND("Unificateur trouvé"),
-	RESOLUTION_RESULT("Résultat de la résolution");
+	NO_UNIFIER("Unification impossible"),
+	RESOLUTION_RESULT("Clause résultante"),
+	EMPTY_SET_FOUND("Clause vide trouvée"),
+	NO_MORE_CLAUSES("Plus de clauses à traiter");
 	
 	private String name;
 	

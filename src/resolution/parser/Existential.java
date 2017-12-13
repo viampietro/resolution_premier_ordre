@@ -16,59 +16,61 @@
  * along with FirstOrderParser.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.dominicscheurer.fol.model;
+package resolution.parser;
 
 import java.util.Set;
 
-import resolution.formule.Et;
 import resolution.formule.Formule;
+import resolution.formule.IlExiste;
+import resolution.formule.Variable;
 
-public class Conjunctive implements Formula {
-    private Formula subformulaA = null, subformulaB = null;
+public class Existential implements Formula {
+    private Formula subformula = null;
+    private Term quantifiedVar = null;
 
-    public Conjunctive(Formula subformulaA, Formula subformulaB) {
-        this.subformulaA = subformulaA;
-        this.subformulaB = subformulaB;
+    public Existential(Formula subformula, Term quantifiedVar) {
+        this.subformula = subformula;
+        this.quantifiedVar = quantifiedVar;
     }
 
-    public Formula getSubformulaA() {
-        return subformulaA;
+    public Formula getSubformula() {
+        return subformula;
     }
 
-    public void setSubformulaA(Formula subformulaA) {
-        this.subformulaA = subformulaA;
+    public void setSubformula(Formula subformula) {
+        this.subformula = subformula;
     }
 
-    public Formula getSubformulaB() {
-        return subformulaB;
+    public Term getQuantifiedVar() {
+        return quantifiedVar;
     }
 
-    public void setSubformulaB(Formula subformulaB) {
-        this.subformulaB = subformulaB;
+    public void setQuantifiedVar(Term quantifiedVar) {
+        this.quantifiedVar = quantifiedVar;
     }
 
     @Override
     public void substitute(Term term, Term forVar) {
-        subformulaA.substitute(term, forVar);
-        subformulaB.substitute(term, forVar);
+        if (!forVar.equals(quantifiedVar)) {
+            subformula.substitute(term, forVar);
+        }
     }
 
     @Override
     public Set<Term> freeVars() {
-        Set<Term> freeVars = subformulaA.freeVars();
-        freeVars.addAll(subformulaB.freeVars());
-        
+        Set<Term> freeVars = subformula.freeVars();
+        freeVars.remove(quantifiedVar);
         return freeVars;
     }
     
     @Override
     public String toString() {
-        return "(" + subformulaA.toString() + " & " + subformulaB.toString() + ")";
+        return "exists " + quantifiedVar.toString() + ". " + subformula.toString();
     }
 
 	@Override
 	public Formule toVincentFormula() {
 		
-		return new Et(subformulaA.toVincentFormula(), subformulaB.toVincentFormula());
+		return new IlExiste((Variable)quantifiedVar.toVincentTerm(), subformula.toVincentFormula());
 	}
 }

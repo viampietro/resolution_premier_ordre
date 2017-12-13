@@ -55,7 +55,7 @@ public class Non extends Formule {
 
 	public Formule simplifier() {
 		
-		// On applique le non � la formule cible
+		// On applique le non à la formule cible
 		// pour la simplifier
 		return cible.simplifier().nier();
 

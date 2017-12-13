@@ -1,16 +1,16 @@
 package resolution.logger;
 
 public class LogMessage {
-	
+
 	private LogMessageType messageType;
 	private String messageContent;
-	
+
 	public LogMessage(LogMessageType messageType, String messageContent) {
 		super();
 		this.messageType = messageType;
 		this.messageContent = messageContent;
 	}
-	
+
 	public LogMessageType getMessageType() {
 		return messageType;
 	}
@@ -29,7 +29,8 @@ public class LogMessage {
 
 	@Override
 	public String toString() {
-		return messageType.toString().toUpperCase() + " : " + messageContent;
+		return (messageContent.isEmpty()) ? messageType.toString().toUpperCase()
+				: messageType.toString().toUpperCase() + " : " + messageContent;
 	}
-	
+
 }

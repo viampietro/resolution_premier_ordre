@@ -94,6 +94,12 @@ public abstract class Formule {
 	 */
 	public boolean resoudre() {
 
+		/**
+		 * On récolte les variables libres avant de skolémiser,
+		 * la skolémisation nécessitant la connaissance des variables libres.
+		 */
+		recolterVariables();
+		
 		ArrayList<Clause> clauses = nier().skolemiser().simplifier().clausifier();
 
 		ArrayList<Clause> sat = new ArrayList<Clause>();
@@ -110,7 +116,7 @@ public abstract class Formule {
 			clauses.remove(0);
 
 			/*
-			 * Si la clause courante est une clause vide, vrai est retourn�
+			 * Si la clause courante est une clause vide, vrai est retourné
 			 */
 			if (clauseCourante.isEmpty())
 				return true;
@@ -131,8 +137,21 @@ public abstract class Formule {
 				for (Clause c : unionSatClauseCourante) {
 					clauseResolvante = c.resoudreAvec(clauseCourante);
 
-					if (clauseResolvante != null)
-						clauses.add(clauseResolvante);
+					if (clauseResolvante != null) {
+						/*
+						 * Si la clause vide a été retournée,
+						 * c'est gagné, on retourne vrai.
+						 */
+						if (clauseResolvante.isEmpty())
+							return true;
+						
+						/*
+						 * Sinon, on ajoute la nouvelle clause à la fin
+						 */
+						else clauses.add(clauseResolvante);
+					}
+						
+
 				}
 
 			}
