@@ -27,3 +27,8 @@ lors de l'herbrandisation ou de la skolémisation d'une formule.
 
 LANCEMENT DU LOGICIEL:
 
+- Assurez-vous d'avoir installer sur votre machine une version du JRE supérieur ou égale à 1.8.
+- Double-cliquez sur l'éxecutable FOLSolver-v1.jar, ou éxecutez le en ligne de commande :
+$ java -jar FOLSolver-v1.jar
+
+
