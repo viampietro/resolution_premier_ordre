@@ -27,6 +27,14 @@ public abstract class Formule {
 	 * liées.
 	 */
 	public abstract void recolterVariables();
+	
+	/**
+	 * Remise à zéro des listes de variables libres et liées
+	 */
+	public void razVariables() {
+		variablesLibres = new ArrayList<>();
+		variablesLiees = new ArrayList<>();
+	}
 
 	/**
 	 * 

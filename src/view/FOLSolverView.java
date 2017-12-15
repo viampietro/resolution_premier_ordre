@@ -44,6 +44,13 @@ public class FOLSolverView extends View<FOLSolver, FOLSolverController> {
 				getController().clearConsole();
 			}
 		});
+		
+		gui.getUserManualMenu().addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				gui.getUserManualWindow().setVisible(true);
+			}
+		});
 
 		/**
 		 * SETTING MVC COMPONENTS

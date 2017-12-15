@@ -30,6 +30,8 @@ public class FOLSolver extends Model {
 	public void createFormula(String formula) throws ParseException {
 
 		setFormula(FOLParser.parse(formula));
+		getFormula().razVariables(); // Raz des variables libres et liées
+		
 		notifyObservers(formula);
 	}
 
